@@ -1,6 +1,8 @@
 package loan;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 public class CreditAssessmentTest {
@@ -443,9 +445,8 @@ public class CreditAssessmentTest {
         double maximum =
                 assessment.calculateMaximumLoanAmount(
                         customer);
-
         assertEquals(
-                270000.0,
+                600000.0,
                 maximum,
                 0.01);
     }

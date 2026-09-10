@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="loan.CreditAssessmentTest" time="0.203" tests="20" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="21"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+    <property name="sun.jnu.encoding" value="Cp1252"/>
+    <property name="java.class.path" value="C:\Users\makam\OneDrive\Desktop\Smart Loan Approval and Risk Classification System\Smart-Loan-Approval-and-Risk-Classification-System-\target\test-classes;C:\Users\makam\OneDrive\Desktop\Smart Loan Approval and Risk Classification System\Smart-Loan-Approval-and-Risk-Classification-System-\target\classes;C:\Users\makam\.m2\repository\junit\junit\4.13.2\junit-4.13.2.jar;C:\Users\makam\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="user.variant" value=""/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="user.timezone" value="Asia/Calcutta"/>
+    <property name="os.name" value="Windows 11"/>
+    <property name="java.vm.specification.version" value="21"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="IN"/>
+    <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-21.0.11\bin"/>
+    <property name="sun.java.command" value="C:\Users\makam\AppData\Local\Temp\surefire1292991617003685783\surefirebooter-20260910111416157_3.jar C:\Users\makam\AppData\Local\Temp\surefire1292991617003685783 2026-09-10T11-14-15_890-jvmRun1 surefire-20260910111416157_1tmp surefire_0-20260910111416157_2tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="C:\Users\makam\OneDrive\Desktop\Smart Loan Approval and Risk Classification System\Smart-Loan-Approval-and-Risk-Classification-System-\target\test-classes;C:\Users\makam\OneDrive\Desktop\Smart Loan Approval and Risk Classification System\Smart-Loan-Approval-and-Risk-Classification-System-\target\classes;C:\Users\makam\.m2\repository\junit\junit\4.13.2\junit-4.13.2.jar;C:\Users\makam\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="C:\Users\makam"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2026-04-21"/>
+    <property name="java.home" value="C:\Program Files\Java\jdk-21.0.11"/>
+    <property name="file.separator" value="\"/>
+    <property name="basedir" value="C:\Users\makam\OneDrive\Desktop\Smart Loan Approval and Risk Classification System\Smart-Loan-Approval-and-Risk-Classification-System-"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="surefire.real.class.path" value="C:\Users\makam\AppData\Local\Temp\surefire1292991617003685783\surefirebooter-20260910111416157_3.jar"/>
+    <property name="user.script" value=""/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="21.0.11+9-LTS-211"/>
+    <property name="user.name" value="makam"/>
+    <property name="stdout.encoding" value="Cp1252"/>
+    <property name="path.separator" value=";"/>
+    <property name="os.version" value="10.0"/>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="localRepository" value="C:\Users\makam\.m2\repository"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="C:\Users\makam\AppData\Local\Temp\"/>
+    <property name="java.version" value="21.0.11"/>
+    <property name="user.dir" value="C:\Users\makam\OneDrive\Desktop\Smart Loan Approval and Risk Classification System\Smart-Loan-Approval-and-Risk-Classification-System-"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="native.encoding" value="Cp1252"/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk-21.0.11\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\Common Files\Oracle\Java\javapath;C:\oraclexe\app\oracle\product\11.2.0\server\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Program Files\Java\jdk-21.0.11\bin;C:\Program Files (x86)\monotone;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Java\jdk-21.0.11\bin;C:\Program Files\Apache\apache-maven-3.9.16\bin;C:\Users\makam\AppData\Local\Programs\Python\Python312\Scripts\;C:\Users\makam\AppData\Local\Programs\Python\Python312\;C:\Users\makam\AppData\Local\Microsoft\WindowsApps;C:\Users\makam\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\makam\AppData\Roaming\npm;."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="Cp1252"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.version" value="21.0.11+9-LTS-211"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="65.0"/>
+  </properties>
+  <testcase name="testInvalidCustomerId" classname="loan.CreditAssessmentTest" time="0.012"/>
+  <testcase name="testMinimumIncomeBoundary" classname="loan.CreditAssessmentTest" time="0.0"/>
+  <testcase name="testDTICalculation" classname="loan.CreditAssessmentTest" time="0.0"/>
+  <testcase name="testBoundaryAge21" classname="loan.CreditAssessmentTest" time="0.0"/>
+  <testcase name="testInvalidLoanAmount" classname="loan.CreditAssessmentTest" time="0.0"/>
+  <testcase name="testLowIncome" classname="loan.CreditAssessmentTest" time="0.001"/>
+  <testcase name="testLoanAmountExceedsLimit" classname="loan.CreditAssessmentTest" time="0.001"/>
+  <testcase name="testMultipleRejectionReasons" classname="loan.CreditAssessmentTest" time="0.0"/>
+  <testcase name="testMinimumCreditScore650" classname="loan.CreditAssessmentTest" time="0.0"/>
+  <testcase name="testNegativeAge" classname="loan.CreditAssessmentTest" time="0.0"/>
+  <testcase name="testHighDTI" classname="loan.CreditAssessmentTest" time="0.001"/>
+  <testcase name="testNegativeIncome" classname="loan.CreditAssessmentTest" time="0.001"/>
+  <testcase name="testLowRiskApproval" classname="loan.CreditAssessmentTest" time="0.001"/>
+  <testcase name="testMaximumPermissibleLoan" classname="loan.CreditAssessmentTest" time="0.0"/>
+  <testcase name="testLowCreditScore" classname="loan.CreditAssessmentTest" time="0.001"/>
+  <testcase name="testInvalidGovernmentId" classname="loan.CreditAssessmentTest" time="0.001"/>
+  <testcase name="testInvalidCreditScore" classname="loan.CreditAssessmentTest" time="0.0"/>
+  <testcase name="testAgeBelow21" classname="loan.CreditAssessmentTest" time="0.001"/>
+  <testcase name="testMediumRiskApproval" classname="loan.CreditAssessmentTest" time="0.002"/>
+  <testcase name="testMaximumDTIBoundary" classname="loan.CreditAssessmentTest" time="0.0"/>
+</testsuite>

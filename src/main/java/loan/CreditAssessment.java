@@ -5,14 +5,18 @@ import java.util.List;
 
 public class CreditAssessment {
 
+    // Loan eligibility constants
+    private static final int MIN_AGE = 21;
     private static final double MIN_MONTHLY_INCOME = 25000.0;
     private static final int MIN_CREDIT_SCORE = 650;
+    private static final int MAX_CREDIT_SCORE = 850;
 
+    // Risk and DTI constants
     private static final double MAX_DTI = 0.40;
     private static final double LOW_RISK_DTI = 0.30;
-
     private static final int LOW_RISK_CREDIT_SCORE = 750;
 
+    // Loan calculation constants
     private static final int LOAN_INCOME_MULTIPLIER = 12;
     private static final int LOAN_TERM_MONTHS = 60;
 
@@ -23,24 +27,30 @@ public class CreditAssessment {
 
         validateInput(customer, application, creditScore);
 
-        List<String> reasons = new ArrayList<>();
+        List<String> rejectionReasons = new ArrayList<>();
 
-        if (customer.getAge() < 21) {
-            reasons.add("Customer must be at least 21 years old");
+        // Basic eligibility checks
+        if (customer.getAge() < MIN_AGE) {
+            rejectionReasons.add(
+                    "Customer must be at least 21 years old");
         }
 
         if (!isValidGovernmentId(customer.getGovernmentId())) {
-            reasons.add("Government ID is invalid");
+            rejectionReasons.add(
+                    "Government ID is invalid");
         }
 
         if (customer.getMonthlyIncome() < MIN_MONTHLY_INCOME) {
-            reasons.add("Monthly income is below the minimum threshold");
+            rejectionReasons.add(
+                    "Monthly income is below the minimum threshold");
         }
 
         if (creditScore < MIN_CREDIT_SCORE) {
-            reasons.add("Credit score is below the minimum requirement");
+            rejectionReasons.add(
+                    "Credit score is below the minimum requirement");
         }
 
+        // Calculate maximum permissible loan
         double maximumLoanAmount =
                 calculateMaximumLoanAmount(customer);
 
@@ -48,34 +58,28 @@ public class CreditAssessment {
                 application.getRequestedLoanAmount();
 
         if (requestedLoanAmount > maximumLoanAmount) {
-            reasons.add(
+            rejectionReasons.add(
                     "Requested loan amount exceeds maximum permissible amount");
         }
 
-        double newLoanMonthlyObligation =
-                requestedLoanAmount / LOAN_TERM_MONTHS;
-
-        double totalMonthlyObligation =
-                customer.getExistingLoanObligations()
-                        + newLoanMonthlyObligation;
-
-        double dti =
-                totalMonthlyObligation
-                        / customer.getMonthlyIncome();
+        // Calculate DTI
+        double dti = calculateDTI(customer, application);
 
         if (dti > MAX_DTI) {
-            reasons.add(
+            rejectionReasons.add(
                     "Debt-to-income ratio exceeds maximum permissible DTI");
         }
 
-        if (!reasons.isEmpty()) {
+        // Reject if any eligibility condition fails
+        if (!rejectionReasons.isEmpty()) {
             return buildResult(
                     "High Risk / Rejected",
                     maximumLoanAmount,
                     dti,
-                    reasons);
+                    rejectionReasons);
         }
 
+        // Determine risk level
         if (creditScore >= LOW_RISK_CREDIT_SCORE
                 && dti <= LOW_RISK_DTI) {
 
@@ -83,57 +87,62 @@ public class CreditAssessment {
                     "Approved - Low Risk",
                     maximumLoanAmount,
                     dti,
-                    reasons);
+                    rejectionReasons);
         }
 
         return buildResult(
                 "Approved - Medium Risk",
                 maximumLoanAmount,
                 dti,
-                reasons);
+                rejectionReasons);
     }
 
+    /**
+     * Calculates the maximum loan amount based on:
+     * 1. Annual-income-based limit
+     * 2. Maximum permissible DTI
+     */
     public double calculateMaximumLoanAmount(Customer customer)
             throws InvalidLoanException {
 
-        if (customer == null) {
-            throw new InvalidLoanException(
-                    "Customer details cannot be null");
-        }
+        validateCustomerFinancialData(customer);
 
-        if (customer.getMonthlyIncome() < 0) {
-            throw new InvalidLoanException(
-                    "Monthly income cannot be negative");
-        }
+        double monthlyIncome =
+                customer.getMonthlyIncome();
 
-        if (customer.getExistingLoanObligations() < 0) {
-            throw new InvalidLoanException(
-                    "Existing loan obligations cannot be negative");
-        }
+        double existingObligations =
+                customer.getExistingLoanObligations();
 
+        // Maximum based on income
         double incomeBasedLimit =
-                customer.getMonthlyIncome()
-                        * LOAN_INCOME_MULTIPLIER;
+                monthlyIncome * LOAN_INCOME_MULTIPLIER;
+
+        // Maximum based on DTI
+        double availableMonthlyCapacity =
+                (monthlyIncome * MAX_DTI)
+                        - existingObligations;
 
         double dtiBasedLimit =
-                (customer.getMonthlyIncome() * MAX_DTI
-                        - customer.getExistingLoanObligations())
+                Math.max(0, availableMonthlyCapacity)
                         * LOAN_TERM_MONTHS;
-
-        if (dtiBasedLimit < 0) {
-            dtiBasedLimit = 0;
-        }
 
         return Math.min(
                 incomeBasedLimit,
                 dtiBasedLimit);
     }
 
+    /**
+     * Calculates the debt-to-income ratio for the
+     * customer's existing obligations plus the new loan.
+     */
     public double calculateDTI(Customer customer,
                                LoanApplication application)
             throws InvalidLoanException {
 
-        validateInput(customer, application, MIN_CREDIT_SCORE);
+        validateInput(
+                customer,
+                application,
+                MIN_CREDIT_SCORE);
 
         double newLoanMonthlyObligation =
                 application.getRequestedLoanAmount()
@@ -147,12 +156,19 @@ public class CreditAssessment {
                 / customer.getMonthlyIncome();
     }
 
+    /**
+     * Valid government ID format:
+     * GOV followed by 3 to 10 digits.
+     */
     private boolean isValidGovernmentId(String governmentId) {
 
         return governmentId != null
                 && governmentId.matches("GOV[0-9]{3,10}");
     }
 
+    /**
+     * Creates the final assessment result.
+     */
     private String buildResult(String status,
                                double maximumLoanAmount,
                                double dti,
@@ -162,23 +178,29 @@ public class CreditAssessment {
 
         result.append(status);
 
-        result.append(" | Maximum Permissible Loan: ₹");
-        result.append(
-                String.format("%.2f", maximumLoanAmount));
+        result.append(" | Maximum Permissible Loan: ₹")
+                .append(String.format(
+                        "%.2f",
+                        maximumLoanAmount));
 
-        result.append(" | DTI: ");
-        result.append(
-                String.format("%.2f%%", dti * 100));
+        result.append(" | DTI: ")
+                .append(String.format(
+                        "%.2f%%",
+                        dti * 100));
 
         if (!reasons.isEmpty()) {
-            result.append(" | Reasons: ");
-            result.append(
-                    String.join("; ", reasons));
+            result.append(" | Reasons: ")
+                    .append(String.join(
+                            "; ",
+                            reasons));
         }
 
         return result.toString();
     }
 
+    /**
+     * Validates common customer and application input.
+     */
     private void validateInput(Customer customer,
                                LoanApplication application,
                                int creditScore)
@@ -194,16 +216,23 @@ public class CreditAssessment {
                     "Loan application cannot be null");
         }
 
-        if (customer.getCustomerId() == null
-                || customer.getCustomerId().trim().isEmpty()) {
+        validateCustomerDetails(customer);
+        validateApplicationDetails(application);
+        validateCreditScore(creditScore);
+    }
 
+    /**
+     * Validates customer information.
+     */
+    private void validateCustomerDetails(Customer customer)
+            throws InvalidLoanException {
+
+        if (isBlank(customer.getCustomerId())) {
             throw new InvalidLoanException(
                     "Customer ID cannot be empty");
         }
 
-        if (customer.getName() == null
-                || customer.getName().trim().isEmpty()) {
-
+        if (isBlank(customer.getName())) {
             throw new InvalidLoanException(
                     "Customer name cannot be empty");
         }
@@ -213,11 +242,23 @@ public class CreditAssessment {
                     "Age cannot be negative");
         }
 
-        if (customer.getGovernmentId() == null
-                || customer.getGovernmentId().trim().isEmpty()) {
-
+        if (isBlank(customer.getGovernmentId())) {
             throw new InvalidLoanException(
                     "Government ID cannot be empty");
+        }
+
+        validateCustomerFinancialData(customer);
+    }
+
+    /**
+     * Validates income and existing loan obligations.
+     */
+    private void validateCustomerFinancialData(Customer customer)
+            throws InvalidLoanException {
+
+        if (customer == null) {
+            throw new InvalidLoanException(
+                    "Customer details cannot be null");
         }
 
         if (customer.getMonthlyIncome() < 0) {
@@ -230,9 +271,21 @@ public class CreditAssessment {
                     "Existing loan obligations cannot be negative");
         }
 
-        if (application.getApplicationId() == null
-                || application.getApplicationId().trim().isEmpty()) {
+        // DTI calculation requires a positive income.
+        if (customer.getMonthlyIncome() == 0) {
+            throw new InvalidLoanException(
+                    "Monthly income must be greater than zero");
+        }
+    }
 
+    /**
+     * Validates loan application information.
+     */
+    private void validateApplicationDetails(
+            LoanApplication application)
+            throws InvalidLoanException {
+
+        if (isBlank(application.getApplicationId())) {
             throw new InvalidLoanException(
                     "Application ID cannot be empty");
         }
@@ -241,10 +294,29 @@ public class CreditAssessment {
             throw new InvalidLoanException(
                     "Requested loan amount must be greater than zero");
         }
+    }
 
-        if (creditScore < 0 || creditScore > 850) {
+    /**
+     * Validates credit score range.
+     */
+    private void validateCreditScore(int creditScore)
+            throws InvalidLoanException {
+
+        if (creditScore < 0
+                || creditScore > MAX_CREDIT_SCORE) {
+
             throw new InvalidLoanException(
                     "Credit score must be between 0 and 850");
         }
+    }
+
+    /**
+     * Checks whether a string is null, empty,
+     * or contains only whitespace.
+     */
+    private boolean isBlank(String value) {
+
+        return value == null
+                || value.trim().isEmpty();
     }
 }
